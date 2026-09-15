@@ -77,6 +77,10 @@ Copy `.env.example` → `.env` (already present for local demo):
 Seed creates **10 bilingual machines** (Lat Pulldown, Seated Row, Leg Press, Chest Press, Shoulder Press, Triceps Pushdown, Leg Curl, Cable Crossover, Smith Squat, Treadmill).
 
 
+## Demo machine photos
+
+Demo photos under `public/machines/` are from Unsplash (free license) — see [CREDITS.md](./CREDITS.md). Not official Éconofitness assets.
+
 ## Machine media & ROI insights
 
 - **Machine.imageUrls** — optional JSON array of up to 3 HTTPS or relative image URLs. Staff paste them in create/edit; member guides show a horizontal media strip (or a pitch-ready “Add photos in admin” empty state).

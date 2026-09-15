@@ -53,9 +53,9 @@ const machines = [
     ],
     sortOrder: 1,
     imageUrls: [
-      "/placeholders/machine-1.svg",
-      "/placeholders/machine-2.svg",
-      "/placeholders/machine-3.svg",
+      "/machines/lat-pulldown-1.jpg",
+      "/machines/lat-pulldown-2.jpg",
+      "/machines/lat-pulldown-3.jpg",
     ],
   },
   {
@@ -141,7 +141,7 @@ const machines = [
       "Ne verrouillez pas agressivement les genoux sous charge lourde.",
     ],
     sortOrder: 3,
-    imageUrls: ["/placeholders/machine-2.svg", "/placeholders/machine-1.svg"],
+    imageUrls: ["/machines/leg-press-1.jpg", "/machines/leg-press-2.jpg"],
   },
   {
     nameEn: "Chest Press Machine",
@@ -184,6 +184,7 @@ const machines = [
       "Ne rebondissez pas en bas du mouvement.",
     ],
     sortOrder: 4,
+    imageUrls: ["/machines/chest-press-1.jpg", "/machines/chest-press-2.jpg"],
   },
   {
     nameEn: "Shoulder Press Machine",
@@ -436,6 +437,7 @@ const machines = [
       "Si vous avez des vertiges, ralentissez immédiatement et tenez les barres.",
     ],
     sortOrder: 10,
+    imageUrls: ["/machines/treadmill-1.jpg", "/machines/treadmill-2.jpg"],
   },
 ];
 

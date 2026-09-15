@@ -12,7 +12,12 @@ type PageProps = { searchParams: Promise<{ tab?: string }> };
 
 export default async function HomePage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const initialTab = params.tab === "workout" ? "workout" as const : "machines" as const;
+  const initialTab =
+    params.tab === "workout"
+      ? ("workout" as const)
+      : params.tab === "progress"
+        ? ("progress" as const)
+        : ("machines" as const);
   const gym = await prisma.gym.findFirst({
     where: { slug: "demo-fitness-montreal" },
     include: {

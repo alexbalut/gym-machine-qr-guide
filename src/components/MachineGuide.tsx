@@ -23,6 +23,7 @@ type Props = {
   gymSlug: string;
   token: string;
   machineId: string;
+  machineSlug?: string;
   nameEn: string;
   nameFr: string;
   category: string;
@@ -37,6 +38,7 @@ export function MachineGuide({
   gymSlug,
   token,
   machineId,
+  machineSlug,
   nameEn,
   nameFr,
   category,
@@ -116,6 +118,7 @@ export function MachineGuide({
       nameEn,
       nameFr,
       category,
+      ...(machineSlug ? { slug: machineSlug } : {}),
     });
     setWorkoutMsg(had ? copy.already : copy.added);
     window.setTimeout(() => setWorkoutMsg(null), 2500);

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   addMachineToWorkout,
   clearWorkout,
+  commitWorkoutToHistory,
   emptyWorkout,
   isCardio,
   loadWorkout,
@@ -19,9 +20,10 @@ type Props = {
   primaryColor: string;
   machines: MachineRef[];
   lang: "en" | "fr";
+  onSaved?: () => void;
 };
 
-export function WorkoutTracker({ gymSlug, primaryColor, machines, lang }: Props) {
+export function WorkoutTracker({ gymSlug, primaryColor, machines, lang, onSaved }: Props) {
   const [session, setSession] = useState<WorkoutSession | null>(null);
   const [hydrated, setHydrated] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -45,10 +47,13 @@ export function WorkoutTracker({ gymSlug, primaryColor, machines, lang }: Props)
             seconds: "Secondes",
             distance: "Distance (km)",
             saveCardio: "Enregistrer",
-            finish: "Terminer la séance",
+            finish: "Terminer",
             clear: "Effacer",
+            save: "Enregistrer",
             finished: "Séance terminée — bonne récupération!",
             cleared: "Séance effacée.",
+            saved: "Séance enregistrée!",
+            nothingToSave: "Rien à enregistrer — ajoutez des séries ou une durée.",
             added: "Ajouté à la séance.",
             already: "Déjà dans la séance.",
             sets: "Séries",
@@ -71,10 +76,13 @@ export function WorkoutTracker({ gymSlug, primaryColor, machines, lang }: Props)
             seconds: "Seconds",
             distance: "Distance (km)",
             saveCardio: "Save",
-            finish: "Finish workout",
+            finish: "Finish",
             clear: "Clear",
+            save: "Save",
             finished: "Workout finished — nice work!",
             cleared: "Workout cleared.",
+            saved: "Workout saved!",
+            nothingToSave: "Nothing to save — log sets or a duration first.",
             added: "Added to workout.",
             already: "Already in workout.",
             sets: "Sets",
@@ -178,6 +186,20 @@ export function WorkoutTracker({ gymSlug, primaryColor, machines, lang }: Props)
     clearWorkout(gymSlug);
     setSession(emptyWorkout(gymSlug));
     showToast(t.cleared);
+  }
+
+  function saveSession() {
+    if (!session) return;
+    const saved = commitWorkoutToHistory(session);
+    if (!saved) {
+      showToast(t.nothingToSave);
+      return;
+    }
+    clearWorkout(gymSlug);
+    setSession(emptyWorkout(gymSlug));
+    showToast(t.saved);
+    window.dispatchEvent(new Event("gymqr-history-updated"));
+    window.setTimeout(() => onSaved?.(), 600);
   }
 
   if (!hydrated || !session) {
@@ -324,18 +346,30 @@ export function WorkoutTracker({ gymSlug, primaryColor, machines, lang }: Props)
       )}
 
       {session.exercises.length > 0 && (
-        <div className="grid grid-cols-2 gap-3 pt-1">
-          <button type="button" onClick={clearSession} className="btn btn-danger !py-3">
-            {t.clear}
-          </button>
+        <div className="space-y-3 pt-1">
           <button
             type="button"
-            onClick={finishWorkout}
-            className="btn btn-secondary !py-3"
-            style={{ borderColor: `${primaryColor}66` }}
+            onClick={saveSession}
+            className="btn btn-primary w-full !py-3.5 text-base"
+            style={{
+              background: `linear-gradient(135deg, ${primaryColor}, #0891b2)`,
+            }}
           >
-            {t.finish}
+            {t.save}
           </button>
+          <div className="grid grid-cols-2 gap-3">
+            <button type="button" onClick={clearSession} className="btn btn-danger !py-3">
+              {t.clear}
+            </button>
+            <button
+              type="button"
+              onClick={finishWorkout}
+              className="btn btn-secondary !py-3"
+              style={{ borderColor: `${primaryColor}66` }}
+            >
+              {t.finish}
+            </button>
+          </div>
         </div>
       )}
     </div>

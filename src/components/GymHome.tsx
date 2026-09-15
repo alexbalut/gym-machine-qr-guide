@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { QrScanner } from "@/components/QrScanner";
 import { WorkoutTracker } from "@/components/WorkoutTracker";
+import { ProgressDashboard } from "@/components/ProgressDashboard";
 
 type MachineRow = {
   id: string;
@@ -15,7 +16,7 @@ type MachineRow = {
   slug: string;
 };
 
-type Tab = "machines" | "workout";
+type Tab = "machines" | "workout" | "progress";
 type MachineMode = "browse" | "scan" | "code";
 
 type Props = {
@@ -32,7 +33,9 @@ type Props = {
 
 export function GymHome({ gym, machines, initialTab = "machines" }: Props) {
   const [lang, setLang] = useState<"en" | "fr">("en");
-  const [tab, setTab] = useState<Tab>(initialTab === "workout" ? "workout" : "machines");
+  const [tab, setTab] = useState<Tab>(
+    initialTab === "workout" || initialTab === "progress" ? initialTab : "machines"
+  );
   const [mode, setMode] = useState<MachineMode>("browse");
 
   const t = useMemo(
@@ -42,10 +45,12 @@ export function GymHome({ gym, machines, initialTab = "machines" }: Props) {
             welcome: "Bienvenue",
             subtitle: "Scannez un QR ou choisissez une machine pour voir le guide.",
             subtitleWorkout: "Enregistrez vos séries et cardio sur les machines du gym.",
+            subtitleProgress: "Suivez vos progrès par machine à partir des séances enregistrées.",
             scan: "Scanner une machine",
             enterCode: "Entrer un code",
             browse: "Machines",
             workout: "Séance",
+            progress: "Progrès",
             back: "Retour",
             staff: "Espace staff",
             empty: "Aucune machine active pour le moment.",
@@ -54,10 +59,12 @@ export function GymHome({ gym, machines, initialTab = "machines" }: Props) {
             welcome: "Welcome",
             subtitle: "Scan a QR or pick a machine to open its how-to guide.",
             subtitleWorkout: "Log sets and cardio using this gym’s machines.",
+            subtitleProgress: "Track progress per machine from your saved workouts.",
             scan: "Scan a machine",
             enterCode: "Enter code",
             browse: "Machines",
             workout: "Workout",
+            progress: "Progress",
             back: "Back",
             staff: "Staff",
             empty: "No active machines yet.",
@@ -115,7 +122,11 @@ export function GymHome({ gym, machines, initialTab = "machines" }: Props) {
           </div>
         </div>
         <p className="mt-4 text-slate-300">
-          {tab === "workout" ? t.subtitleWorkout : t.subtitle}
+          {tab === "workout"
+            ? t.subtitleWorkout
+            : tab === "progress"
+              ? t.subtitleProgress
+              : t.subtitle}
         </p>
       </header>
 
@@ -140,6 +151,15 @@ export function GymHome({ gym, machines, initialTab = "machines" }: Props) {
           }`}
         >
           {t.workout}
+        </button>
+        <button
+          type="button"
+          onClick={() => goTab("progress")}
+          className={`flex-1 py-3 min-h-[48px] ${
+            tab === "progress" ? "bg-cyan-400 text-slate-950" : "bg-slate-900 text-slate-300"
+          }`}
+        >
+          {t.progress}
         </button>
       </nav>
 
@@ -227,12 +247,22 @@ export function GymHome({ gym, machines, initialTab = "machines" }: Props) {
           gymSlug={gym.slug}
           primaryColor={gym.primaryColor}
           lang={lang}
+          onSaved={() => goTab("progress")}
           machines={machines.map((m) => ({
             id: m.id,
             nameEn: m.nameEn,
             nameFr: m.nameFr,
             category: m.category,
+            slug: m.slug,
           }))}
+        />
+      )}
+
+      {tab === "progress" && (
+        <ProgressDashboard
+          gymSlug={gym.slug}
+          primaryColor={gym.primaryColor}
+          lang={lang}
         />
       )}
 

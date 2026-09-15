@@ -31,6 +31,7 @@ export default async function SlugGuidePage({ params }: Props) {
           gymSlug={m.gym.slug}
           token={m.token}
           machineId={m.id}
+          machineSlug={m.slug}
           nameEn={m.nameEn}
           nameFr={m.nameFr}
           category={m.category}

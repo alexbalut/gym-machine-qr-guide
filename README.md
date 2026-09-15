@@ -16,6 +16,7 @@ Pitch-ready for Montréal gyms. Multi-tenant (Gym model + branding).
 
 ```bash
 cd gym-machine-qr-guide
+cp .env.example .env
 npm install
 npx prisma db push
 npm run seed

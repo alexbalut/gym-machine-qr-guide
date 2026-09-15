@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { MachineForm } from "@/components/admin/MachineForm";
-import { parseJsonArray } from "@/lib/utils";
+import { parseJsonArray, parseImageUrls } from "@/lib/utils";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -37,6 +37,7 @@ export default async function EditMachinePage({ params }: Props) {
           warningsFr: parseJsonArray(m.warningsFr).join("\n"),
           sortOrder: m.sortOrder,
           active: m.active,
+          imageUrls: parseImageUrls(m.imageUrls).join("\n"),
         }}
       />
     </main>

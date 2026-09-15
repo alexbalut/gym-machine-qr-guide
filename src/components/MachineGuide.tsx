@@ -29,6 +29,7 @@ type Props = {
   category: string;
   en: Localized;
   fr: Localized;
+  imageUrls?: string[];
   initialLang?: Lang;
 };
 
@@ -44,6 +45,7 @@ export function MachineGuide({
   category,
   en,
   fr,
+  imageUrls = [],
   initialLang = "en",
 }: Props) {
   const [lang, setLang] = useState<Lang>(initialLang);
@@ -71,6 +73,7 @@ export function MachineGuide({
             added: "Ajouté à la séance.",
             already: "Déjà dans la séance.",
             openWorkout: "Voir la séance",
+            addPhotos: "Ajoutez des photos dans l'admin",
           }
         : {
             steps: "Steps",
@@ -88,6 +91,7 @@ export function MachineGuide({
             added: "Added to workout.",
             already: "Already in workout.",
             openWorkout: "Open workout",
+            addPhotos: "Add photos in admin",
           },
     [lang]
   );
@@ -162,6 +166,32 @@ export function MachineGuide({
           {data.viewCount} {copy.views}
         </span>
       </div>
+
+      
+      {(imageUrls?.length ?? 0) > 0 ? (
+        <div className="mb-6 -mx-1">
+          <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
+            {imageUrls!.map((src, i) => (
+              <div
+                key={`${src}-${i}`}
+                className="snap-center shrink-0 w-[min(100%,320px)] aspect-[16/10] rounded-2xl overflow-hidden border border-border bg-slate-900"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={src}
+                  alt=""
+                  className="h-full w-full object-cover"
+                  loading={i === 0 ? "eager" : "lazy"}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="mb-6 rounded-2xl border border-dashed border-border bg-slate-900/50 px-4 py-8 text-center">
+          <p className="text-sm text-slate-400">{copy.addPhotos}</p>
+        </div>
+      )}
 
       {data.description && <p className="text-slate-300 mb-6 leading-relaxed">{data.description}</p>}
 

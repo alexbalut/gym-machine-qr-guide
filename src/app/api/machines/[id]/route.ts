@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { normalizeImageUrls } from "@/lib/utils";
 
 function arr(v: unknown) {
   if (Array.isArray(v)) return v.map(String).filter(Boolean);
@@ -57,6 +58,10 @@ export async function PUT(req: Request, ctx: Ctx) {
         warningsFr: JSON.stringify(arr(body.warningsFr)),
         active: body.active !== false && body.active !== "false",
         sortOrder: Number(body.sortOrder) || 0,
+        imageUrls: (() => {
+          const urls = normalizeImageUrls(body.imageUrls);
+          return urls.length ? JSON.stringify(urls) : null;
+        })(),
       },
     });
     return NextResponse.json({ ok: true, machine });

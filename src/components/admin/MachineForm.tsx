@@ -19,6 +19,7 @@ export type MachineFormValues = {
   warningsFr: string;
   sortOrder: number;
   active: boolean;
+  imageUrls: string;
 };
 
 const empty: MachineFormValues = {
@@ -37,6 +38,7 @@ const empty: MachineFormValues = {
   warningsFr: "",
   sortOrder: 0,
   active: true,
+  imageUrls: "",
 };
 
 function Field({
@@ -161,6 +163,20 @@ export function MachineForm({
           />
           Active (visible to members)
         </label>
+      </div>
+
+      <div className="card p-5">
+        <Field label="Photo URLs (1–3, one per line)">
+          <textarea
+            className="input min-h-[88px] font-mono text-sm"
+            value={values.imageUrls}
+            onChange={(e) => set("imageUrls", e.target.value)}
+            placeholder="https://… or /placeholders/machine-1.svg (one per line)"
+          />
+        </Field>
+        <p className="text-xs text-slate-500 mt-2">
+          HTTPS or relative paths (e.g. /placeholders/…). Shown above steps on the member guide.
+        </p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-4 card p-5">

@@ -52,6 +52,11 @@ const machines = [
       "Évitez de hausser les épaules vers les oreilles.",
     ],
     sortOrder: 1,
+    imageUrls: [
+      "/placeholders/machine-1.svg",
+      "/placeholders/machine-2.svg",
+      "/placeholders/machine-3.svg",
+    ],
   },
   {
     nameEn: "Seated Cable Row",
@@ -136,6 +141,7 @@ const machines = [
       "Ne verrouillez pas agressivement les genoux sous charge lourde.",
     ],
     sortOrder: 3,
+    imageUrls: ["/placeholders/machine-2.svg", "/placeholders/machine-1.svg"],
   },
   {
     nameEn: "Chest Press Machine",
@@ -463,8 +469,27 @@ async function main() {
     },
   });
 
+  // Deterministic demo views: a few zeroes for ROI "content gap", others ranked.
+  const viewBySlug: Record<string, number> = {
+    "lat-pulldown": 86,
+    "seated-cable-row": 54,
+    "leg-press": 71,
+    "chest-press": 42,
+    "shoulder-press": 28,
+    "triceps-pushdown": 19,
+    "leg-curl": 0,
+    "cable-crossover": 33,
+    "smith-squat": 0,
+    treadmill: 61,
+  };
+
+  const created: { id: string; slug: string }[] = [];
   for (const m of machines) {
-    await prisma.machine.create({
+    const imageUrls =
+      "imageUrls" in m && Array.isArray((m as { imageUrls?: string[] }).imageUrls)
+        ? JSON.stringify((m as { imageUrls: string[] }).imageUrls)
+        : null;
+    const row = await prisma.machine.create({
       data: {
         gymId: gym.id,
         nameEn: m.nameEn,
@@ -483,8 +508,25 @@ async function main() {
         warningsFr: JSON.stringify(m.warningsFr),
         sortOrder: m.sortOrder,
         active: true,
-        viewCount: Math.floor(Math.random() * 40) + 5,
+        viewCount: viewBySlug[m.slug] ?? 10,
+        imageUrls,
       },
+    });
+    created.push({ id: row.id, slug: row.slug });
+  }
+
+  const bySlug = Object.fromEntries(created.map((c) => [c.slug, c.id]));
+  const sampleIssues: { slug: string; note: string; status: string }[] = [
+    { slug: "lat-pulldown", note: "Thigh pad feels loose on the right side.", status: "OPEN" },
+    { slug: "leg-press", note: "Safety catch sticks when unlocking.", status: "OPEN" },
+    { slug: "treadmill", note: "Emergency stop clip missing.", status: "RESOLVED" },
+    { slug: "chest-press", note: "Seat adjustment pin hard to pull.", status: "RESOLVED" },
+  ];
+  for (const issue of sampleIssues) {
+    const machineId = bySlug[issue.slug];
+    if (!machineId) continue;
+    await prisma.issueReport.create({
+      data: { machineId, note: issue.note, status: issue.status },
     });
   }
 

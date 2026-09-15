@@ -52,6 +52,7 @@ model Machine {
   warningsEn    String?       // JSON array
   warningsFr    String?
   muscleGroups  String?       // comma-separated
+  imageUrls     String?       // JSON array of up to 3 image URLs
   active        Boolean       @default(true)
   viewCount     Int           @default(0)
   sortOrder     Int           @default(0)

@@ -26,3 +26,21 @@ export type Lang = "en" | "fr";
 export function pickLang<T>(en: T, fr: T, lang: Lang): T {
   return lang === "fr" ? fr : en;
 }
+
+export function parseImageUrls(value: string | null | undefined): string[] {
+  return parseJsonArray(value).filter(Boolean).slice(0, 3);
+}
+
+/** Normalize form input (newline- or comma-separated) to up to 3 URL strings. */
+export function normalizeImageUrls(v: unknown): string[] {
+  let parts: string[] = [];
+  if (Array.isArray(v)) {
+    parts = v.map(String);
+  } else if (typeof v === "string") {
+    parts = v.split(/[\n,]+/);
+  }
+  return parts
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0)
+    .slice(0, 3);
+}

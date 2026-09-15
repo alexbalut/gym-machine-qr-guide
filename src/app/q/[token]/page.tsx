@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { MachineGuide } from "@/components/MachineGuide";
 import { getMachineByToken, incrementViews, localizeMachine } from "@/lib/machines";
+import { parseImageUrls } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,7 @@ export default async function TokenGuidePage({ params }: Props) {
           nameEn={m.nameEn}
           nameFr={m.nameFr}
           category={m.category}
+          imageUrls={parseImageUrls(m.imageUrls)}
           en={localizeMachine(refreshed, "en")}
           fr={localizeMachine(refreshed, "fr")}
         />

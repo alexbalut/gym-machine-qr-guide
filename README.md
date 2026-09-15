@@ -76,6 +76,12 @@ Copy `.env.example` → `.env` (already present for local demo):
 
 Seed creates **10 bilingual machines** (Lat Pulldown, Seated Row, Leg Press, Chest Press, Shoulder Press, Triceps Pushdown, Leg Curl, Cable Crossover, Smith Squat, Treadmill).
 
+
+## Machine media & ROI insights
+
+- **Machine.imageUrls** — optional JSON array of up to 3 HTTPS or relative image URLs. Staff paste them in create/edit; member guides show a horizontal media strip (or a pitch-ready “Add photos in admin” empty state).
+- **`/admin/insights`** — owner ROI dashboard: total views, open vs resolved issues, top machines by views, and zero-view content gaps. Uses real Prisma data only.
+
 ## Key routes
 
 | Route | Who | Description |
@@ -89,6 +95,7 @@ Seed creates **10 bilingual machines** (Lat Pulldown, Seated Row, Leg Press, Che
 | `/admin/machines/new` | Staff | Create machine |
 | `/admin/machines/[id]/edit` | Staff | Edit machine |
 | `/admin/print` | Staff | Printable QR sheet (browser print / PDF) |
+| `/admin/insights` | Staff | Owner ROI dashboard (views, issues, content gaps) |
 | `/admin/issues` | Staff | Member-reported issues |
 
 ### APIs (selected)

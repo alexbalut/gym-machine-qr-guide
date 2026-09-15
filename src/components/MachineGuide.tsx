@@ -44,7 +44,7 @@ export function MachineGuide({ gymName, gymColor, token, en, fr, initialLang = "
             placeholder: "Ex. : coussin desserré, câble usé…",
             send: "Envoyer",
             thanks: "Merci — le staff a été notifié.",
-            scan: "Scanner une autre machine",
+            scan: "Retour aux machines",
             error: "Échec de l'envoi. Réessayez.",
           }
         : {
@@ -57,7 +57,7 @@ export function MachineGuide({ gymName, gymColor, token, en, fr, initialLang = "
             placeholder: "e.g. loose pad, frayed cable…",
             send: "Submit",
             thanks: "Thanks — staff has been notified.",
-            scan: "Scan another machine",
+            scan: "Back to machines",
             error: "Could not send. Try again.",
           },
     [lang]
@@ -182,7 +182,7 @@ export function MachineGuide({ gymName, gymColor, token, en, fr, initialLang = "
         )}
       </section>
 
-      <Link href="/scan" className="btn btn-primary w-full">
+      <Link href="/" className="btn btn-primary w-full">
         {copy.scan}
       </Link>
     </div>

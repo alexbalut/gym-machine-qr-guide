@@ -2,7 +2,7 @@
 
 **B2B QR machine-instruction app for gyms.** Members scan a QR on a machine → bilingual (EN/FR) how-to guide. Staff manage machines, download QRs, and print floor sheets.
 
-Pitch-ready for Montréal gyms. Multi-tenant (Gym model + branding).
+Multi-tenant (Gym model + branding). Seeded demo gym: **Demo Fitness Montréal**.
 
 ## Stack
 
@@ -35,7 +35,7 @@ Production build check:
 npm run build && npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) — you land **inside the member demo** for Demo Fitness Montréal (scan / enter code / browse machines). No marketing landing page.
 
 ### Environment
 
@@ -63,11 +63,11 @@ Seed creates **10 bilingual machines** (Lat Pulldown, Seated Row, Leg Press, Che
 
 | Route | Who | Description |
 |-------|-----|-------------|
-| `/` | Public | Marketing landing |
-| `/scan` | Members | Camera QR scan + manual entry + demo machine list |
+| `/` | Members | **Demo gym home** — branding, scan / enter code, browsable machine list |
+| `/scan` | Members | Dedicated camera QR scan + manual entry |
 | `/q/[token]` | Members | Machine guide (opaque QR target) |
 | `/m/[gymSlug]/[machineSlug]` | Members | Friendly slug URL (e.g. `/m/demo-fitness-montreal/lat-pulldown`) |
-| `/admin/login` | Staff | Admin login |
+| `/admin/login` | Staff | Admin login (subtle link on member home) |
 | `/admin` | Staff | Machine list, views, QR download |
 | `/admin/machines/new` | Staff | Create machine |
 | `/admin/machines/[id]/edit` | Staff | Edit machine |
@@ -82,22 +82,13 @@ Seed creates **10 bilingual machines** (Lat Pulldown, Seated Row, Leg Press, Che
 - `POST /api/issues` (public, from guide page)
 - `PATCH /api/issues/[id]` (resolve)
 
-## Product pitch (Montréal)
+## Live demo flow (seller narrates)
 
-- **Problem:** New members don’t know machines; trainers get interrupted; laminated posters go stale; French + English needed.
-- **Solution:** Stick a QR on each machine → phone opens a clean EN/FR guide (steps, tips, warnings). Staff update content in minutes and reprint QRs when needed.
-- **Wedge:** Independent gyms & boutiques in MTL / QC that want bilingual UX without building an app.
-- **Demo flow (5 min):** Landing → Staff login → Print sheet → Scan/open a machine → flip EN/FR → submit an issue → see it in Admin → Issues.
+1. Open `/` — member is “at” Demo Fitness Montréal.
+2. Browse a machine → EN/FR guide → optionally report an issue.
+3. Staff: `/admin/login` → print QR sheet → issues inbox.
 
-## Monetization ideas
-
-1. **Per-location SaaS** — $49–149/mo per gym (machine caps, branding).
-2. **Setup fee** — photo + content pack for 20–40 machines (agency upsell).
-3. **Franchise / multi-site** — volume pricing + shared template library.
-4. **OEM / equipment brands** — white-label guides shipped with machines.
-5. **Add-ons** — trainer video embeds, workout programs, member accounts (later).
-
-Out of scope for this MVP: payments, real email, native apps.
+Seller explains the product verbally; the UI stays in-product.
 
 ## Scripts
 
@@ -112,14 +103,6 @@ Out of scope for this MVP: payments, real email, native apps.
 ## Repo
 
 Target remote: `https://github.com/alexbalut/gym-machine-qr-guide`
-
-```bash
-git init
-git add .
-git commit -m "Initial MVP: GymQR Guide"
-git remote add origin git@github.com:alexbalut/gym-machine-qr-guide.git
-git push -u origin main
-```
 
 ## Caveats
 

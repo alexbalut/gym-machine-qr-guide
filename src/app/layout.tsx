@@ -14,11 +14,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "GymQR Guide — Machine instructions via QR",
-    template: "%s · GymQR Guide",
+    default: "Demo Fitness Montréal — Machine guides",
+    template: "%s · Demo Fitness",
   },
   description:
-    "B2B QR guides for gym machines. Members scan, learn form in EN/FR. Staff manage machines and print QR sheets. Built for Montréal gyms.",
+    "Scan a machine QR or browse guides at Demo Fitness Montréal. Bilingual EN/FR how-tos.",
 };
 
 export default function RootLayout({

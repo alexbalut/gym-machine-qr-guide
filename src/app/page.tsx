@@ -8,7 +8,11 @@ export const metadata = {
   description: "Machine how-to guides — scan a QR or browse machines.",
 };
 
-export default async function HomePage() {
+type PageProps = { searchParams: Promise<{ tab?: string }> };
+
+export default async function HomePage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const initialTab = params.tab === "workout" ? "workout" as const : "machines" as const;
   const gym = await prisma.gym.findFirst({
     where: { slug: "demo-fitness-montreal" },
     include: {
@@ -63,6 +67,7 @@ export default async function HomePage() {
           category: m.category,
           slug: m.slug,
         }))}
+        initialTab={initialTab}
       />
     </main>
   );

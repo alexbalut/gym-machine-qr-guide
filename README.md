@@ -37,6 +37,15 @@ npm run build && npm start
 
 Open [http://localhost:3000](http://localhost:3000) — you land **inside the member demo** for Demo Fitness Montréal (scan / enter code / browse machines). No marketing landing page.
 
+### Workout tracker (members)
+
+On `/`, switch to the **Workout** tab (or open `/?tab=workout`). Members pick machines from the same active list as the home/QR section:
+
+- **Strength** (`category !== "Cardio"`): log multiple sets with required reps and optional weight (kg).
+- **Cardio** (`category === "Cardio"`): log duration (minutes + seconds) and optional distance (km).
+
+In-progress sessions persist in **localStorage** keyed by gym slug (`gymqr-workout:<slug>`) so a refresh keeps the workout. Machine guide pages also offer **Add to workout**.
+
 ### Environment
 
 Copy `.env.example` → `.env` (already present for local demo):
@@ -63,7 +72,7 @@ Seed creates **10 bilingual machines** (Lat Pulldown, Seated Row, Leg Press, Che
 
 | Route | Who | Description |
 |-------|-----|-------------|
-| `/` | Members | **Demo gym home** — branding, scan / enter code, browsable machine list |
+| `/` | Members | **Demo gym home** — **Machines** / **Workout** tabs, scan / enter code, machine list |
 | `/scan` | Members | Dedicated camera QR scan + manual entry |
 | `/q/[token]` | Members | Machine guide (opaque QR target) |
 | `/m/[gymSlug]/[machineSlug]` | Members | Friendly slug URL (e.g. `/m/demo-fitness-montreal/lat-pulldown`) |
@@ -84,9 +93,10 @@ Seed creates **10 bilingual machines** (Lat Pulldown, Seated Row, Leg Press, Che
 
 ## Live demo flow (seller narrates)
 
-1. Open `/` — member is “at” Demo Fitness Montréal.
-2. Browse a machine → EN/FR guide → optionally report an issue.
-3. Staff: `/admin/login` → print QR sheet → issues inbox.
+1. Open `/` — member is “at” Demo Fitness Montréal (Machines | Workout tabs).
+2. Browse a machine → EN/FR guide → optionally **Add to workout** or report an issue.
+3. Workout tab: log strength sets / cardio duration; session survives refresh (localStorage).
+4. Staff: `/admin/login` → print QR sheet → issues inbox.
 
 Seller explains the product verbally; the UI stays in-product.
 

@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { Lang } from "@/lib/utils";
+import { addMachineToWorkout, loadWorkout } from "@/lib/workout";
 
 type Localized = {
   id: string;
@@ -19,16 +20,34 @@ type Localized = {
 type Props = {
   gymName: string;
   gymColor: string;
+  gymSlug: string;
   token: string;
+  machineId: string;
+  nameEn: string;
+  nameFr: string;
+  category: string;
   en: Localized;
   fr: Localized;
   initialLang?: Lang;
 };
 
-export function MachineGuide({ gymName, gymColor, token, en, fr, initialLang = "en" }: Props) {
+export function MachineGuide({
+  gymName,
+  gymColor,
+  gymSlug,
+  token,
+  machineId,
+  nameEn,
+  nameFr,
+  category,
+  en,
+  fr,
+  initialLang = "en",
+}: Props) {
   const [lang, setLang] = useState<Lang>(initialLang);
   const [note, setNote] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [workoutMsg, setWorkoutMsg] = useState<string | null>(null);
   const data = lang === "fr" ? fr : en;
 
   const copy = useMemo(
@@ -46,6 +65,10 @@ export function MachineGuide({ gymName, gymColor, token, en, fr, initialLang = "
             thanks: "Merci — le staff a été notifié.",
             scan: "Retour aux machines",
             error: "Échec de l'envoi. Réessayez.",
+            addWorkout: "Ajouter à la séance",
+            added: "Ajouté à la séance.",
+            already: "Déjà dans la séance.",
+            openWorkout: "Voir la séance",
           }
         : {
             steps: "Steps",
@@ -59,6 +82,10 @@ export function MachineGuide({ gymName, gymColor, token, en, fr, initialLang = "
             thanks: "Thanks — staff has been notified.",
             scan: "Back to machines",
             error: "Could not send. Try again.",
+            addWorkout: "Add to workout",
+            added: "Added to workout.",
+            already: "Already in workout.",
+            openWorkout: "Open workout",
           },
     [lang]
   );
@@ -79,6 +106,19 @@ export function MachineGuide({ gymName, gymColor, token, en, fr, initialLang = "
     } catch {
       setStatus("error");
     }
+  }
+
+  function handleAddToWorkout() {
+    const before = loadWorkout(gymSlug);
+    const had = before?.exercises.some((e) => e.machineId === machineId);
+    addMachineToWorkout(gymSlug, {
+      id: machineId,
+      nameEn,
+      nameFr,
+      category,
+    });
+    setWorkoutMsg(had ? copy.already : copy.added);
+    window.setTimeout(() => setWorkoutMsg(null), 2500);
   }
 
   return (
@@ -122,6 +162,25 @@ export function MachineGuide({ gymName, gymColor, token, en, fr, initialLang = "
 
       {data.description && <p className="text-slate-300 mb-6 leading-relaxed">{data.description}</p>}
 
+      <div className="mb-5 space-y-2">
+        <button
+          type="button"
+          onClick={handleAddToWorkout}
+          className="btn btn-secondary w-full !py-3"
+          style={{ borderColor: `${gymColor}55` }}
+        >
+          + {copy.addWorkout}
+        </button>
+        {workoutMsg && (
+          <p className="text-sm text-center text-emerald-300" role="status">
+            {workoutMsg}{" "}
+            <Link href="/?tab=workout" className="underline underline-offset-2 hover:text-emerald-200">
+              {copy.openWorkout}
+            </Link>
+          </p>
+        )}
+      </div>
+
       <section className="card p-5 mb-4">
         <h2 className="font-semibold text-lg mb-3">{copy.steps}</h2>
         <ol className="space-y-3">
@@ -138,10 +197,10 @@ export function MachineGuide({ gymName, gymColor, token, en, fr, initialLang = "
         <section className="card p-5 mb-4 border-emerald-400/20">
           <h2 className="font-semibold text-lg mb-3 text-emerald-300">{copy.tips}</h2>
           <ul className="space-y-2 text-slate-300">
-            {data.tips.map((t, i) => (
+            {data.tips.map((tip, i) => (
               <li key={i} className="flex gap-2">
                 <span className="text-emerald-300">✓</span>
-                <span>{t}</span>
+                <span>{tip}</span>
               </li>
             ))}
           </ul>
@@ -152,10 +211,10 @@ export function MachineGuide({ gymName, gymColor, token, en, fr, initialLang = "
         <section className="card p-5 mb-4 border-rose-400/25">
           <h2 className="font-semibold text-lg mb-3 text-rose-300">{copy.warnings}</h2>
           <ul className="space-y-2 text-slate-300">
-            {data.warnings.map((t, i) => (
+            {data.warnings.map((w, i) => (
               <li key={i} className="flex gap-2">
                 <span className="text-rose-300">!</span>
-                <span>{t}</span>
+                <span>{w}</span>
               </li>
             ))}
           </ul>

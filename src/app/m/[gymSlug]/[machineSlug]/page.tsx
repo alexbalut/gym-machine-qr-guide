@@ -28,7 +28,12 @@ export default async function SlugGuidePage({ params }: Props) {
         <MachineGuide
           gymName={m.gym.name}
           gymColor={m.gym.primaryColor}
+          gymSlug={m.gym.slug}
           token={m.token}
+          machineId={m.id}
+          nameEn={m.nameEn}
+          nameFr={m.nameFr}
+          category={m.category}
           en={localizeMachine(refreshed, "en")}
           fr={localizeMachine(refreshed, "fr")}
         />

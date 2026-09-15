@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { QrScanner } from "@/components/QrScanner";
+import { WorkoutTracker } from "@/components/WorkoutTracker";
 
 type MachineRow = {
   id: string;
@@ -14,6 +15,9 @@ type MachineRow = {
   slug: string;
 };
 
+type Tab = "machines" | "workout";
+type MachineMode = "browse" | "scan" | "code";
+
 type Props = {
   gym: {
     name: string;
@@ -23,11 +27,13 @@ type Props = {
     slug: string;
   };
   machines: MachineRow[];
+  initialTab?: Tab;
 };
 
-export function GymHome({ gym, machines }: Props) {
+export function GymHome({ gym, machines, initialTab = "machines" }: Props) {
   const [lang, setLang] = useState<"en" | "fr">("en");
-  const [mode, setMode] = useState<"browse" | "scan" | "code">("browse");
+  const [tab, setTab] = useState<Tab>(initialTab === "workout" ? "workout" : "machines");
+  const [mode, setMode] = useState<MachineMode>("browse");
 
   const t = useMemo(
     () =>
@@ -35,9 +41,11 @@ export function GymHome({ gym, machines }: Props) {
         ? {
             welcome: "Bienvenue",
             subtitle: "Scannez un QR ou choisissez une machine pour voir le guide.",
+            subtitleWorkout: "Enregistrez vos séries et cardio sur les machines du gym.",
             scan: "Scanner une machine",
             enterCode: "Entrer un code",
             browse: "Machines",
+            workout: "Séance",
             back: "Retour",
             staff: "Espace staff",
             empty: "Aucune machine active pour le moment.",
@@ -45,9 +53,11 @@ export function GymHome({ gym, machines }: Props) {
         : {
             welcome: "Welcome",
             subtitle: "Scan a QR or pick a machine to open its how-to guide.",
+            subtitleWorkout: "Log sets and cardio using this gym’s machines.",
             scan: "Scan a machine",
             enterCode: "Enter code",
             browse: "Machines",
+            workout: "Workout",
             back: "Back",
             staff: "Staff",
             empty: "No active machines yet.",
@@ -55,9 +65,14 @@ export function GymHome({ gym, machines }: Props) {
     [lang]
   );
 
+  function goTab(next: Tab) {
+    setTab(next);
+    if (next === "machines") setMode("browse");
+  }
+
   return (
     <div className="mx-auto max-w-xl px-4 py-8 w-full flex-1">
-      <header className="mb-8">
+      <header className="mb-6">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <span
@@ -99,10 +114,36 @@ export function GymHome({ gym, machines }: Props) {
             </button>
           </div>
         </div>
-        <p className="mt-4 text-slate-300">{t.subtitle}</p>
+        <p className="mt-4 text-slate-300">
+          {tab === "workout" ? t.subtitleWorkout : t.subtitle}
+        </p>
       </header>
 
-      {mode === "browse" && (
+      <nav
+        className="mb-6 flex rounded-xl border border-border overflow-hidden text-sm font-semibold"
+        aria-label="Member sections"
+      >
+        <button
+          type="button"
+          onClick={() => goTab("machines")}
+          className={`flex-1 py-3 min-h-[48px] ${
+            tab === "machines" ? "bg-cyan-400 text-slate-950" : "bg-slate-900 text-slate-300"
+          }`}
+        >
+          {t.browse}
+        </button>
+        <button
+          type="button"
+          onClick={() => goTab("workout")}
+          className={`flex-1 py-3 min-h-[48px] ${
+            tab === "workout" ? "bg-cyan-400 text-slate-950" : "bg-slate-900 text-slate-300"
+          }`}
+        >
+          {t.workout}
+        </button>
+      </nav>
+
+      {tab === "machines" && mode === "browse" && (
         <>
           <div className="grid grid-cols-2 gap-3 mb-8">
             <button
@@ -153,7 +194,7 @@ export function GymHome({ gym, machines }: Props) {
         </>
       )}
 
-      {mode === "scan" && (
+      {tab === "machines" && mode === "scan" && (
         <section>
           <button
             type="button"
@@ -167,7 +208,7 @@ export function GymHome({ gym, machines }: Props) {
         </section>
       )}
 
-      {mode === "code" && (
+      {tab === "machines" && mode === "code" && (
         <section>
           <button
             type="button"
@@ -179,6 +220,20 @@ export function GymHome({ gym, machines }: Props) {
           <h2 className="text-xl font-semibold mb-4">{t.enterCode}</h2>
           <CodeEntry />
         </section>
+      )}
+
+      {tab === "workout" && (
+        <WorkoutTracker
+          gymSlug={gym.slug}
+          primaryColor={gym.primaryColor}
+          lang={lang}
+          machines={machines.map((m) => ({
+            id: m.id,
+            nameEn: m.nameEn,
+            nameFr: m.nameFr,
+            category: m.category,
+          }))}
+        />
       )}
 
       <p className="mt-10 text-center text-xs text-slate-500">

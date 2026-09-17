@@ -86,16 +86,16 @@ export function ProgressDashboard({ gymSlug, primaryColor, lang }: Props) {
 
   if (!hydrated) {
     return (
-      <div className="card p-6 text-center text-slate-400 text-sm">…</div>
+      <div className="card p-6 text-center text-muted text-sm">…</div>
     );
   }
 
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="font-semibold text-slate-200 text-lg">{t.title}</h2>
+        <h2 className="font-semibold text-navy text-lg">{t.title}</h2>
         {history.length > 0 && (
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-muted">
             {history.length} {t.workouts}
           </span>
         )}
@@ -103,7 +103,7 @@ export function ProgressDashboard({ gymSlug, primaryColor, lang }: Props) {
 
       {progress.length === 0 ? (
         <div className="card p-6 text-center space-y-2">
-          <p className="text-slate-400 text-sm">{t.empty}</p>
+          <p className="text-muted text-sm">{t.empty}</p>
         </div>
       ) : (
         <ul className="space-y-3">
@@ -182,7 +182,7 @@ function MachineProgressCard({
             <p className="font-medium truncate">
               {lang === "fr" ? row.nameFr : row.nameEn}
             </p>
-            <p className="text-slate-500 text-sm">
+            <p className="text-muted text-sm">
               {cardio ? labels.cardio : labels.strength} · {row.category}
             </p>
           </div>
@@ -192,7 +192,7 @@ function MachineProgressCard({
         </div>
 
         <div className="flex items-center justify-between gap-3">
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-muted">
             {labels.lastUsed}:{" "}
             {lastDate.toLocaleDateString(lang === "fr" ? "fr-CA" : "en-CA", {
               month: "short",
@@ -237,12 +237,12 @@ function MachineProgressCard({
       </button>
 
       {expanded && (
-        <div className="border-t border-border px-4 py-3 bg-slate-950/30 space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+        <div className="border-t border-border px-4 py-3 bg-[var(--wash)] space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted">
             {labels.history}
           </p>
           {recentWorkouts.length === 0 ? (
-            <p className="text-sm text-slate-500">{labels.noDetail}</p>
+            <p className="text-sm text-muted">{labels.noDetail}</p>
           ) : (
             <ul className="space-y-1.5">
               {recentWorkouts.map((w) => {
@@ -266,9 +266,9 @@ function MachineProgressCard({
                 return (
                   <li
                     key={w.id}
-                    className="flex items-center justify-between gap-2 text-sm rounded-lg bg-slate-950/40 px-3 py-2"
+                    className="flex items-center justify-between gap-2 text-sm rounded-lg bg-[var(--wash)] px-3 py-2"
                   >
-                    <span className="text-slate-400 shrink-0">{when}</span>
+                    <span className="text-muted shrink-0">{when}</span>
                     <span className="font-medium text-right truncate">{detail}</span>
                   </li>
                 );
@@ -283,16 +283,16 @@ function MachineProgressCard({
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg bg-slate-950/40 px-2 py-2 min-w-0">
-      <p className="text-slate-500 truncate mb-0.5">{label}</p>
-      <p className="font-semibold text-slate-200 truncate text-sm">{value}</p>
+    <div className="rounded-lg bg-[var(--wash)] px-2 py-2 min-w-0">
+      <p className="text-muted truncate mb-0.5">{label}</p>
+      <p className="font-semibold text-navy truncate text-sm">{value}</p>
     </div>
   );
 }
 
 function MiniSpark({ values, color }: { values: number[]; color: string }) {
   if (values.length < 2) {
-    return <span className="text-slate-600 text-xs">·</span>;
+    return <span className="text-muted text-xs">·</span>;
   }
   const max = Math.max(...values, 1);
   const w = 56;

@@ -454,7 +454,7 @@ async function main() {
       name: "Demo Fitness Montréal",
       slug: "demo-fitness-montreal",
       tagline: "Bougez mieux. Entraînez-vous en confiance.",
-      primaryColor: "#06b6d4",
+      primaryColor: "#0176D3",
       secondaryColor: "#0f172a",
       city: "Montréal, QC",
     },

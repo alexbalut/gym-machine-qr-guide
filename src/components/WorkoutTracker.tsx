@@ -204,7 +204,7 @@ export function WorkoutTracker({ gymSlug, primaryColor, machines, lang, onSaved 
 
   if (!hydrated || !session) {
     return (
-      <div className="card p-6 text-center text-slate-400 text-sm">
+      <div className="card p-6 text-center text-muted text-sm">
         …
       </div>
     );
@@ -215,9 +215,9 @@ export function WorkoutTracker({ gymSlug, primaryColor, machines, lang, onSaved 
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="font-semibold text-slate-200 text-lg">{t.title}</h2>
+        <h2 className="font-semibold text-navy text-lg">{t.title}</h2>
         {session.exercises.length > 0 && (
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-muted">
             {session.exercises.length} · {new Date(session.startedAt).toLocaleTimeString()}
           </span>
         )}
@@ -225,7 +225,7 @@ export function WorkoutTracker({ gymSlug, primaryColor, machines, lang, onSaved 
 
       {toast && (
         <p
-          className="text-sm rounded-xl px-3 py-2 border border-emerald-400/30 bg-emerald-400/10 text-emerald-200"
+          className="text-sm rounded-xl px-3 py-2 border border-[#c7e4cf] bg-[#eef8f1] text-[var(--ok)]"
           role="status"
         >
           {toast}
@@ -233,7 +233,7 @@ export function WorkoutTracker({ gymSlug, primaryColor, machines, lang, onSaved 
       )}
 
       {session.exercises.length === 0 ? (
-        <p className="text-slate-400 text-sm">{t.empty}</p>
+        <p className="text-muted text-sm">{t.empty}</p>
       ) : (
         <ul className="space-y-4">
           {session.exercises.map((ex) => (
@@ -243,14 +243,14 @@ export function WorkoutTracker({ gymSlug, primaryColor, machines, lang, onSaved 
                   <p className="font-medium truncate">
                     {lang === "fr" ? ex.nameFr : ex.nameEn}
                   </p>
-                  <p className="text-slate-500 text-sm">
+                  <p className="text-muted text-sm">
                     {isCardio(ex.category) ? t.cardio : t.sets} · {ex.category}
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => removeExercise(ex.id)}
-                  className="text-xs text-rose-300 hover:text-rose-200 shrink-0 px-2 py-1"
+                  className="text-xs text-[var(--danger)] hover:opacity-80 shrink-0 px-2 py-1"
                 >
                   {t.removeEx}
                 </button>
@@ -298,26 +298,24 @@ export function WorkoutTracker({ gymSlug, primaryColor, machines, lang, onSaved 
           type="button"
           onClick={() => setPickerOpen(true)}
           className="btn btn-primary w-full !py-3.5 text-base"
-          style={{
-            background: `linear-gradient(135deg, ${primaryColor}, #0891b2)`,
-          }}
+          style={{ background: primaryColor }}
         >
           {t.add}
         </button>
       ) : (
         <div className="card p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-slate-200">{t.pick}</h3>
+            <h3 className="font-semibold text-navy">{t.pick}</h3>
             <button
               type="button"
               onClick={() => setPickerOpen(false)}
-              className="text-sm text-slate-400 hover:text-cyan-300"
+              className="text-sm text-muted link-accent"
             >
               {t.cancel}
             </button>
           </div>
           {machines.length === 0 ? (
-            <p className="text-slate-400 text-sm">{t.noMachines}</p>
+            <p className="text-muted text-sm">{t.noMachines}</p>
           ) : (
             <ul className="space-y-2 max-h-72 overflow-y-auto">
               {machines.map((m) => {
@@ -327,13 +325,13 @@ export function WorkoutTracker({ gymSlug, primaryColor, machines, lang, onSaved 
                     <button
                       type="button"
                       onClick={() => handleAddMachine(m)}
-                      className="w-full text-left card px-4 py-3.5 flex items-center justify-between gap-3 hover:border-cyan-400/40 transition min-h-[52px]"
+                      className="w-full text-left card px-4 py-3.5 flex items-center justify-between gap-3 hover:border-[var(--accent)] transition min-h-[52px]"
                     >
                       <span className="min-w-0">
                         <span className="font-medium block truncate">
                           {lang === "fr" ? m.nameFr : m.nameEn}
                         </span>
-                        <span className="text-slate-500 text-sm">{m.category}</span>
+                        <span className="text-muted text-sm">{m.category}</span>
                       </span>
                       <span className="badge shrink-0">{inList ? "✓" : "+"}</span>
                     </button>
@@ -351,9 +349,7 @@ export function WorkoutTracker({ gymSlug, primaryColor, machines, lang, onSaved 
             type="button"
             onClick={saveSession}
             className="btn btn-primary w-full !py-3.5 text-base"
-            style={{
-              background: `linear-gradient(135deg, ${primaryColor}, #0891b2)`,
-            }}
+            style={{ background: primaryColor }}
           >
             {t.save}
           </button>
@@ -416,19 +412,19 @@ function StrengthForm({
           {sets.map((s, i) => (
             <li
               key={s.id}
-              className="flex items-center justify-between gap-2 rounded-lg bg-slate-950/40 px-3 py-2 text-sm"
+              className="flex items-center justify-between gap-2 rounded-lg bg-[var(--wash)] px-3 py-2 text-sm"
             >
               <span>
-                <span className="text-slate-500 mr-2">#{i + 1}</span>
+                <span className="text-muted mr-2">#{i + 1}</span>
                 <span className="font-semibold">{s.reps}</span> reps
                 {s.weightKg !== undefined && (
-                  <span className="text-slate-400"> · {s.weightKg} kg</span>
+                  <span className="text-muted"> · {s.weightKg} kg</span>
                 )}
               </span>
               <button
                 type="button"
                 onClick={() => onRemove(s.id)}
-                className="text-xs text-slate-400 hover:text-rose-300 px-2 py-1 min-h-[36px]"
+                className="text-xs text-muted hover:text-[var(--danger)] px-2 py-1 min-h-[36px]"
               >
                 {labels.removeSet}
               </button>
@@ -453,7 +449,7 @@ function StrengthForm({
         <div>
           <label className="label">
             {labels.weight}{" "}
-            <span className="text-slate-500 font-normal">({labels.optional})</span>
+            <span className="text-muted font-normal">({labels.optional})</span>
           </label>
           <input
             className="input !py-3 text-lg text-center"
@@ -466,14 +462,12 @@ function StrengthForm({
         <button
           type="submit"
           className="btn btn-primary !px-4 !py-3 min-h-[48px] self-end"
-          style={{
-            background: `linear-gradient(135deg, ${primaryColor}, #0891b2)`,
-          }}
+          style={{ background: primaryColor }}
         >
           +
         </button>
       </form>
-      <p className="text-xs text-slate-500 sr-only">{labels.addSet}</p>
+      <p className="text-xs text-muted sr-only">{labels.addSet}</p>
     </div>
   );
 }
@@ -521,12 +515,12 @@ function CardioForm({
   return (
     <div className="space-y-3">
       {hasLogged && (
-        <p className="text-sm rounded-lg bg-slate-950/40 px-3 py-2">
+        <p className="text-sm rounded-lg bg-[var(--wash)] px-3 py-2">
           <span className="font-semibold">
             {value.minutes}:{String(value.seconds).padStart(2, "0")}
           </span>
           {value.distanceKm !== undefined && (
-            <span className="text-slate-400"> · {value.distanceKm} km</span>
+            <span className="text-muted"> · {value.distanceKm} km</span>
           )}
         </p>
       )}
@@ -560,7 +554,7 @@ function CardioForm({
         <div>
           <label className="label">
             {labels.distance}{" "}
-            <span className="text-slate-500 font-normal">({labels.optional})</span>
+            <span className="text-muted font-normal">({labels.optional})</span>
           </label>
           <input
             className="input !py-3 text-lg text-center"
@@ -573,9 +567,7 @@ function CardioForm({
         <button
           type="submit"
           className="btn btn-primary w-full !py-3"
-          style={{
-            background: `linear-gradient(135deg, ${primaryColor}, #0891b2)`,
-          }}
+          style={{ background: primaryColor }}
         >
           {labels.save}
         </button>
